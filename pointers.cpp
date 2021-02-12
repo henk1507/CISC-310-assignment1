@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     student.l_name = new char[128];
 
     // Sequence of user input -> store in fields of `student`
-    student.id = promptInt("Please enter the student's id number: ", 0, 999999999);
+    student.id = promptInt("Please enter the student's id number: ", -1, 1000000000);
     
     while(invalid)
     {
@@ -100,13 +100,24 @@ int promptInt(std::string message, int min, int max)
 {
     // Code to prompt user for an int
     bool invalid = true;
+    std::string string_in;
     int input;
+    bool fail;
 
     while(invalid)
     {
+        fail = false;
         std::cout << message;
-        std::cin >> input;
-        if(input >= max or input <= min or std::cin.fail())
+        std::cin >> string_in;
+        try
+        {
+            input = std::stoi(string_in);
+        }
+        catch(const std::exception& e)
+        {
+            fail = true;
+        }
+        if(std::cin.fail() or string_in != std::to_string(input) or input > max or input < min or fail)
         {
             std::cout << "Sorry, I cannot understand your answer" << std::endl;
             std::cin.clear();
@@ -132,13 +143,24 @@ double promptDouble(std::string message, double min, double max)
 {
     // Code to prompt user for a double
     bool invalid = true;
+    std::string string_in;
     double input;
+    bool fail;
 
     while(invalid)
     {
+        fail = false;
         std::cout << message;
-        std::cin >> input;
-        if(input >= max or input <= min or std::cin.fail())
+        std::cin >> string_in;
+        try
+        {
+            input = std::stod(string_in);
+        }
+        catch(const std::exception& e)
+        {
+            fail = true;
+        }
+        if(std::cin.fail() or input > max or input < min or fail)
         {
             std::cout << "Sorry, I cannot understand your answer" << std::endl;
             std::cin.clear();
